@@ -1,21 +1,22 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/contactSlice';
-import { useContacts } from '../../hooks/useSelectors';
+import { addContact } from '../../redux/operations';
+import { useSelector } from 'react-redux';
+import { selectContacts } from '../../redux/selectors';
 import css from './ContactForm.module.css';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
 
-  const contacts = useContacts();
+  const contacts = useSelector(selectContacts);
 
   const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    const isExistContactName = contacts.some(contact => name === contact.name);
+    const isExistContactName = contacts?.some(contact => name === contact.name);
 
     if (isExistContactName) {
       alert(`${name} is already in contacts`);
@@ -24,20 +25,20 @@ const ContactForm = () => {
 
     const newContact = {
       name,
-      number,
+      phone,
     };
 
     dispatch(addContact(newContact));
 
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   const handleChange = ({ target: { name, value } }) => {
     if (name === 'name') {
       setName(value);
-    } else if (name === 'number') {
-      setNumber(value);
+    } else if (name === 'phone') {
+      setPhone(value);
     }
   };
 
@@ -59,10 +60,12 @@ const ContactForm = () => {
         <input
           className={css.input}
           type="tel"
-          name="number"
-          value={number}
+          name="phone"
+          value={phone}
           onChange={handleChange}
           required
+          minlength="6"
+          maxlength="10"
         />
       </label>
       <button type="submit" className={css.button}>
