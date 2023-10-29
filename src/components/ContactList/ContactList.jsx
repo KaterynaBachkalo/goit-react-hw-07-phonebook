@@ -3,33 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact } from 'redux/operations';
 import ContactItem from 'components/ContactItem/ContactItem';
 import {
-  selectContacts,
   selectError,
-  selectFilter,
   selectIsLoading,
+  selectVisibleContacts,
 } from 'redux/selectors';
 import { Loader } from 'components/Loader/Loader';
 
 const ContactList = () => {
-  const filter = useSelector(selectFilter);
-  const contacts = useSelector(selectContacts);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
 
   const dispatch = useDispatch();
 
-  const getFilteredContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts?.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
   const onDeleteContact = id => {
     dispatch(deleteContact(id));
   };
 
-  const filteredContacts = getFilteredContacts();
+  const filteredContacts = useSelector(selectVisibleContacts);
 
   return (
     <ul className={css.list}>
