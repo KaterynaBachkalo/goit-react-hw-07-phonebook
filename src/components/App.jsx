@@ -2,8 +2,15 @@ import Filter from './Filter/Filter';
 import { ReactComponent as IconPhone } from '../../src/img/icon-phonebook.svg';
 import ContactList from './ContactList/ContactList';
 import ContactForm from './ContactForm/ContactForm';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchContacts } from 'redux/operations';
 
 export const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
   return (
     <div className="container">
       <div className="phonebook-wrapper">
